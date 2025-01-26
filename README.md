@@ -14,8 +14,8 @@
 <li>User authentication</li>
 <li>Staff functionality</li>
 <li>Patient functionality</li>
+<li>Task functionality</li>
 
 <ul>Pending</ul>
-<li>Task functionality</li>
 <li>Image functionality</li>
 <li>AWS S3 integration</li>
