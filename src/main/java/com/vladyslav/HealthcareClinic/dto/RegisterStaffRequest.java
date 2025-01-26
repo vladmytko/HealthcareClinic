@@ -12,6 +12,7 @@ import java.time.LocalDate;
 @Data
 public class RegisterStaffRequest {
 
+
     @Email(message = "Email must be valid")
     @NotBlank(message = "Email is required")
     private String email;
@@ -39,7 +40,7 @@ public class RegisterStaffRequest {
     @NotBlank(message = "Specialisation is required")
     private String specialisation;
 
-    // Gettes and Settes
+    // GETTERS AND SETTERS
 
 
     public @Email(message = "Email must be valid") @NotBlank(message = "Email is required") String getEmail() {

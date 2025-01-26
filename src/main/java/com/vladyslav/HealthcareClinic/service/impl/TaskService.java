@@ -2,6 +2,7 @@ package com.vladyslav.HealthcareClinic.service.impl;
 
 import com.vladyslav.HealthcareClinic.dto.Response;
 import com.vladyslav.HealthcareClinic.dto.TaskDTO;
+import com.vladyslav.HealthcareClinic.dto.requests.TaskRequest;
 import com.vladyslav.HealthcareClinic.entity.Patient;
 import com.vladyslav.HealthcareClinic.entity.Staff;
 import com.vladyslav.HealthcareClinic.entity.Task;
@@ -31,35 +32,34 @@ public class TaskService implements ITaskService {
 
 
     @Override
-    public Response addNewTask(String description,
-                               LocalDate timestamp,
-                               String price,
-                               Long patientId,
-                               Long staffId) {
+    public Response addNewTask(TaskRequest taskRequest) {
 
         Response response = new Response();
 
         try {
-            // Check if task with same id exists, if yes this indicates issues with database
-//            if(taskRepository.existsById(task.getId())) {
-//                throw new OurException("Task with id " + task.getId() + " already exists");
-//            }
+            // Validate required fields
+            if (taskRequest.getPatientId() == null || taskRequest.getStaffId() == null) {
+                throw new OurException("Patient ID and Staff ID cannot be null.");
+            }
 
             Task task = new Task();
 
             // Validate and fetch Patient
-            Patient patient = patientRepository.findById(patientId)
-                    .orElseThrow(() -> new OurException("Patient not found with ID: " + patientId));
+            Patient patient = patientRepository.findById(taskRequest.getPatientId())
+                    .orElseThrow(() -> new OurException("Patient not found with ID: " + taskRequest.getPatientId()));
 
             // Validate and fetch Staff
-            Staff staff = staffRepository.findById(staffId)
-                    .orElseThrow(() -> new OurException("Staff not found with ID: " + staffId));
+            Staff staff = staffRepository.findById(taskRequest.getStaffId())
+                    .orElseThrow(() -> new OurException("Staff not found with ID: " + taskRequest.getStaffId()));
+
+
 
             task.setPatient(patient);
             task.setStaff(staff);
-            task.setDescription(description);
-            task.setTimestamp(timestamp);
-            task.setPrice(price);
+            task.setDescription(taskRequest.getDescription());
+            task.setTimestamp(taskRequest.getTimestamp());
+            task.setPrice(taskRequest.getPrice());
+            task.setCompleted(taskRequest.isCompleted());
 
             // Save new task
             Task savedTask = taskRepository.save(task);
@@ -79,7 +79,7 @@ public class TaskService implements ITaskService {
 
             // Handle unexpected error
             response.setStatusCode(500);
-            response.setMessage("Error creating new task" + e.getMessage());
+            response.setMessage("Error creating new task " + e.getMessage());
         }
 
         return response;

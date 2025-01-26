@@ -20,6 +20,7 @@ public class RegisterRequest {
     @Size(min = 6, message = "Password must be at least 6 characters long")
     private String password;
 
+
     @NotBlank(message = "First name is required")
     private String firstName;
 
@@ -35,6 +36,8 @@ public class RegisterRequest {
     @NotNull(message = "Date of birth is required")
     @JsonFormat(pattern = "dd/MM/yyyy")
     private LocalDate dateOfBirth;
+
+
 
     private String diagnosis;
     private String condition;

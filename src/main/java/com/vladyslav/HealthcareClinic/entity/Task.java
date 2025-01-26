@@ -5,6 +5,7 @@ package com.vladyslav.HealthcareClinic.entity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 import java.time.LocalDate;
@@ -21,14 +22,14 @@ public class Task {
     @NotBlank(message = "Description is required")
     private String description;
 
-    @NotBlank(message = "Date is required")
-    @JsonFormat(pattern = "dd/MM/yyyy")
-    private LocalDate timestamp;
+     @NotNull(message = "Date is required")
+     @JsonFormat(pattern = "dd/MM/yyyy")
+    private LocalDate timestamp; // Default to today's date
 
     @NotBlank(message = "Price is required")
     private String price;
 
-    private boolean isCompleted = false;
+    private boolean isCompleted;
 
     @ManyToOne
     @JoinColumn(name = "patient_id", referencedColumnName = "id", nullable = false)
@@ -58,11 +59,11 @@ public class Task {
         this.description = description;
     }
 
-    public @NotBlank(message = "Date is required") LocalDate getTimestamp() {
+    public @NotNull(message = "Date is required") LocalDate getTimestamp() {
         return timestamp;
     }
 
-    public void setTimestamp(@NotBlank(message = "Date is required") LocalDate timestamp) {
+    public void setTimestamp(@NotNull(message = "Date is required") LocalDate timestamp) {
         this.timestamp = timestamp;
     }
 

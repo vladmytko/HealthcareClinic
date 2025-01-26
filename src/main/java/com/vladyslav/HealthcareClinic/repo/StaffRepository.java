@@ -17,4 +17,7 @@ public interface StaffRepository extends JpaRepository<Staff, Long> {
 
     @Query("SELECT s FROM Staff s WHERE s.firstName = :firstName AND s.lastName = :lastName")
     Optional<Staff> findByName(@Param("firstName") String firstName, @Param("lastName") String lastName);
+
+//    @Query("SELECT s FROM Staff s WHERE s.userId = :userId")
+//    Optional<Staff> findByUserId(@Param("userId") Long userId);
 }

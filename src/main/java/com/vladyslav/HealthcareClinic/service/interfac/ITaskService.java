@@ -1,6 +1,7 @@
 package com.vladyslav.HealthcareClinic.service.interfac;
 
 import com.vladyslav.HealthcareClinic.dto.Response;
+import com.vladyslav.HealthcareClinic.dto.requests.TaskRequest;
 import com.vladyslav.HealthcareClinic.entity.Patient;
 import com.vladyslav.HealthcareClinic.entity.Staff;
 import com.vladyslav.HealthcareClinic.entity.Task;
@@ -9,11 +10,7 @@ import java.time.LocalDate;
 
 public interface ITaskService {
 
-    Response addNewTask(String description,
-                        LocalDate timestamp,
-                        String price,
-                        Long patientId,
-                        Long staffId);
+    Response addNewTask(TaskRequest taskRequest);
 
     Response getTaskById(Long taskId);
 
