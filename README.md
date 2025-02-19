@@ -95,13 +95,7 @@ Below is the current status of API endpoints, indicating which tasks have been c
 | **/delete-image-by-id/image ID** | Admin/Staff | ⚠️ Needs Update | Deletes image entity from mySQL, does not delete image from S3 |
 | **/update-image-by-id/image ID** | Admin/Staff | ⚠️ Needs Update | Partially works, image does not update |
 
----
 
-### **Legend**
-✅ **Completed** → Fully functional  
-❌ **Fail** → Not working  
-⚠️ **Error** → Requires changes 
----
 
 
 
