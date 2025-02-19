@@ -88,7 +88,7 @@ Below is the current status of API endpoints, indicating which tasks have been c
 ### **Image Management (`/image`)**
 | Task | Role | Result |
 |------|------|---------|
-| **/add-image** | Admin/Staff | ❌ Fail |
+| **/add-image** | Admin/Staff | ✅ Completed |
 | **/get-image-by-id/image ID** | Admin/Staff | ❌ Fail |
 | **/get-all-images** | Admin/Staff | ❌ Fail |
 | **/get-images-by-patient-id/patient ID** | Admin/Staff | ❌ Fail |
