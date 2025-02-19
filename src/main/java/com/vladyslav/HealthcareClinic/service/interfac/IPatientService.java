@@ -17,6 +17,8 @@ public interface IPatientService {
 
     Response getAllPatients();
 
+    Response getPatientInfo(String email);
+
     Response deletePatientById(Long patientId);
 
     Response updatePatient(Long patientId,
@@ -28,8 +30,12 @@ public interface IPatientService {
                            LocalDate dateOfBirth
                            );
 
+    Response updatePatientDiagnosis(Long patientId, String diagnosis, String condition);
 
-    Response getPatientInfo(String email);
+
+
+
+
 
 
 }

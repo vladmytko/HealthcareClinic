@@ -237,7 +237,7 @@ public class TaskService implements ITaskService {
     }
 
     @Override
-    public Response updateTask(Long taskId, String description, LocalDate timestamp, String price, Patient patient) {
+    public Response updateTask(Long taskId, String description, String price) {
 
         Response response = new Response();
 
@@ -247,16 +247,14 @@ public class TaskService implements ITaskService {
 
             // Update the task details
             if(description != null) task.setDescription(description);
-            if(timestamp != null) task.setTimestamp(timestamp);
             if(price != null) task.setPrice(price);
-            if(patient != null) task.setPatient(patient);
 
 
             // Save the updated task
-            taskRepository.save(task);
+            Task updatedTask = taskRepository.save(task);
 
             // Map to DTO
-            TaskDTO taskDTO = Utils.mapTastEntityToTaskDTO(task);
+            TaskDTO taskDTO = Utils.mapTastEntityToTaskDTO(updatedTask);
 
             // Prepare successful response
             response.setStatusCode(200);
@@ -278,7 +276,7 @@ public class TaskService implements ITaskService {
     }
 
     @Override
-    public Response isTaskCompleted(Long taskId, boolean isCompleted) {
+    public Response taskCompleted(Long taskId) {
 
         Response response = new Response();
 

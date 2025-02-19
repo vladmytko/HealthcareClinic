@@ -3,6 +3,7 @@ package com.vladyslav.HealthcareClinic.utils;
 import com.vladyslav.HealthcareClinic.dto.*;
 import com.vladyslav.HealthcareClinic.entity.*;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -23,68 +24,34 @@ public class Utils {
             return null;
         }
 
-        return new PatientDTO(
-                patient.getId(),
-                patient.getFirstName(),
-                patient.getLastName(),
-                patient.getPhoneNumber(),
-                patient.getDateOfBirth(),
-                patient.getAddress(),
-                patient.getDiagnosis(),
-                patient.getConditions(),
-                patient.getUser() != null ? patient.getUser().getEmail() : null
-        );
+        return new PatientDTO(patient.getId(), patient.getFirstName(), patient.getLastName(), patient.getPhoneNumber(), patient.getDateOfBirth(), patient.getAddress(), patient.getDiagnosis(), patient.getConditions(), patient.getUser() != null ? patient.getUser().getEmail() : null);
     }
 
     // Map Staff entity to StaffDTO
-    public static StaffDTO mapStaffEntityToStaffDTO(Staff staff){
-        if(staff == null) {
+    public static StaffDTO mapStaffEntityToStaffDTO(Staff staff) {
+        if (staff == null) {
             throw new IllegalStateException("Staff must have an associated user");
         }
 
-        return new StaffDTO(
-                staff.getId(),
-                staff.getFirstName(),
-                staff.getLastName(),
-                staff.getPhoneNumber(),
-                staff.getDateOfBirth(),
-                staff.getAddress(),
-                staff.getSpecialisation(),
-                staff.getUser() != null ? staff.getUser().getEmail() : null
-        );
+        return new StaffDTO(staff.getId(), staff.getFirstName(), staff.getLastName(), staff.getPhoneNumber(), staff.getDateOfBirth(), staff.getAddress(), staff.getSpecialisation(), staff.getUser() != null ? staff.getUser().getEmail() : null);
     }
 
     //Map Task Entity to TaskDTO
-    public static TaskDTO mapTastEntityToTaskDTO(Task task){
-        if(task == null) {
+    public static TaskDTO mapTastEntityToTaskDTO(Task task) {
+        if (task == null) {
             return null;
         }
 
-        return new TaskDTO(
-                task.getId(),
-                task.getDescription(),
-                task.getTimestamp(),
-                task.getPatient() != null ? task.getPatient().getId() : null,
-                task.getPatient() != null ? task.getPatient().getFirstName() + " " + task.getPatient().getLastName() : "Unknown staff",
-                task.getStaff() != null ? task.getStaff().getId() : null,
-                task.getStaff() != null ? task.getStaff().getFirstName() + " " + task.getStaff().getLastName() : "Unknown staff",
-                task.isCompleted()
-        );
+        return new TaskDTO(task.getId(), task.getDescription(), task.getTimestamp(), task.getPrice(), task.getPatient() != null ? task.getPatient().getId() : null, task.getPatient() != null ? task.getPatient().getFirstName() + " " + task.getPatient().getLastName() : "Unknown staff", task.getStaff() != null ? task.getStaff().getId() : null, task.getStaff() != null ? task.getStaff().getFirstName() + " " + task.getStaff().getLastName() : "Unknown staff", task.isCompleted());
     }
 
     // Map Image entity to ImageDTO
-    public static ImageDTO mapImageEntityToImageDTO(Image image){
-        if(image == null){
+    public static ImageDTO mapImageEntityToImageDTO(Image image) {
+        if (image == null) {
             return null;
         }
 
-        return new ImageDTO(
-                image.getId(),
-                image.getDescription(),
-                image.getUploadDate(),
-                image.getImageUrl(),
-                image.getPatient() != null ? image.getPatient().getId() : null
-        );
+        return new ImageDTO(image.getId(), image.getDescription(), image.getUploadDate(), image.getImageUrl(), image.getPatient() != null ? image.getPatient().getId() : null);
     }
 
     public static List<UserDTO> mapUserListEntityToUserListDTO(List<User> userList) {

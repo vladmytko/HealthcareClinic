@@ -19,7 +19,7 @@ public class ImageDTO {
         this.id = id;
         this.description = description;
         this.uploadDate = uploadDate;
-        this.imageUrl = imageUrl;
+        this.imageUrl = s3Key;
         this.patientId = patientId;
     }
 

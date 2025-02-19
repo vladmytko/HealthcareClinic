@@ -29,14 +29,13 @@ public class PatientService implements IPatientService {
     private JWTUtils jwtUtils;
 
 
-
     @Override
     public Response addPatient(Patient patient) {
         Response response = new Response();
 
         try {
-            if(patientRepository.existsByEmail(patient.getEmail())) {
-                throw  new OurException(patient.getEmail() + " already exists");
+            if (patientRepository.existsByEmail(patient.getEmail())) {
+                throw new OurException(patient.getEmail() + " already exists");
             }
 
             Patient savedPatient = patientRepository.save(patient);
@@ -62,7 +61,7 @@ public class PatientService implements IPatientService {
 
         try {
 
-            Patient patient = patientRepository.findById(patientId).orElseThrow(()-> new OurException("Patient Not Found"));
+            Patient patient = patientRepository.findById(patientId).orElseThrow(() -> new OurException("Patient Not Found"));
             PatientDTO patientDTO = Utils.mapPatientEntityToPatientDTO(patient);
 
             response.setStatusCode(200);
@@ -86,7 +85,7 @@ public class PatientService implements IPatientService {
         Response response = new Response();
 
         try {
-            Patient patient = patientRepository.findByEmail(email).orElseThrow(()-> new OurException("User Not Found"));
+            Patient patient = patientRepository.findByEmail(email).orElseThrow(() -> new OurException("User Not Found"));
             PatientDTO patientDTO = Utils.mapPatientEntityToPatientDTO(patient);
 
             response.setStatusCode(200);
@@ -108,7 +107,7 @@ public class PatientService implements IPatientService {
         Response response = new Response();
 
         try {
-            Patient patient = patientRepository.findPatientByName(firstName, lastName).orElseThrow(()-> new OurException("User Not Found"));
+            Patient patient = patientRepository.findPatientByName(firstName, lastName).orElseThrow(() -> new OurException("User Not Found"));
             PatientDTO patientDTO = Utils.mapPatientEntityToPatientDTO(patient);
 
             response.setStatusCode(200);
@@ -153,7 +152,7 @@ public class PatientService implements IPatientService {
         Response response = new Response();
 
         try {
-            patientRepository.findById(patientId).orElseThrow(()-> new OurException("User Not Found"));
+            patientRepository.findById(patientId).orElseThrow(() -> new OurException("User Not Found"));
             patientRepository.deleteById(patientId);
             response.setStatusCode(200);
             response.setMessage("successful");
@@ -175,20 +174,20 @@ public class PatientService implements IPatientService {
 
         try {
             // Fetch patient details from database
-            Patient patient = patientRepository.findById(patientId).orElseThrow(()-> new OurException("User Not Found"));
+            Patient patient = patientRepository.findById(patientId).orElseThrow(() -> new OurException("User Not Found"));
 
             // Update the patient's details
-            if (firstName !=null) patient.setFirstName(firstName);
-            if (lastName !=null) patient.setLastName(lastName);
-            if (address !=null) patient.setAddress(address);
-            if (email !=null){
-                User user = userRepository.findById(patient.getUser().getId()).orElseThrow(()->new OurException("User Not Found"));
+            if (firstName != null) patient.setFirstName(firstName);
+            if (lastName != null) patient.setLastName(lastName);
+            if (address != null) patient.setAddress(address);
+            if (email != null) {
+                User user = userRepository.findById(patient.getUser().getId()).orElseThrow(() -> new OurException("User Not Found"));
                 patient.setEmail(email);
                 user.setEmail(email);
                 userRepository.save(user);
             }
-            if (phoneNumber !=null) patient.setPhoneNumber(phoneNumber);
-            if (dateOfBirth !=null){
+            if (phoneNumber != null) patient.setPhoneNumber(phoneNumber);
+            if (dateOfBirth != null) {
                 patient.setDateOfBirth(dateOfBirth);
             } else {
                 patient.setDateOfBirth(patient.getDateOfBirth());
@@ -216,13 +215,46 @@ public class PatientService implements IPatientService {
         return response;
     }
 
+    public Response updatePatientDiagnosis(Long patientId, String diagnosis, String condition) {
+
+        Response response = new Response();
+
+        try {
+            // Fetch details from database
+            Patient patient = patientRepository.findById(patientId).orElseThrow(() -> new OurException("User Not Found"));
+
+            //Update the patient's details
+            if (diagnosis != null) patient.setDiagnosis(diagnosis);
+            if (condition != null) patient.setConditions(condition);
+
+            // Save the updated patient
+            Patient updatedPatient = patientRepository.save(patient);
+
+            // Map the updated patient to a DTO
+            PatientDTO patientDTO = Utils.mapPatientEntityToPatientDTO(updatedPatient);
+
+            response.setStatusCode(200);
+            response.setMessage("Successful");
+            response.setPatientDTO(patientDTO);
+        } catch (OurException e) {
+            response.setStatusCode(400);
+            response.setMessage(e.getMessage());
+        } catch (Exception e) {
+            response.setStatusCode(500);
+            response.setMessage("Error updating patient condition and diagnosis" + e.getMessage());
+        }
+
+        return response;
+
+    }
+
     @Override
     public Response getPatientInfo(String email) {
 
         Response response = new Response();
 
         try {
-            Patient patient = patientRepository.findByEmail(email).orElseThrow(()-> new OurException("User Not Found"));
+            Patient patient = patientRepository.findByEmail(email).orElseThrow(() -> new OurException("User Not Found"));
             PatientDTO patientDTO = Utils.mapPatientEntityToPatientDTO(patient);
 
             response.setStatusCode(200);

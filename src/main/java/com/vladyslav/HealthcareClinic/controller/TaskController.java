@@ -74,10 +74,8 @@ public class TaskController {
     @PreAuthorize("hasAuthority('ADMIN') || hasAuthority('STAFF')")
     public ResponseEntity<Response> updateTask(@PathVariable Long taskId,
                                                @RequestParam(value = "description", required = false) String description,
-                                               @RequestParam(value = "timestamp", required = false) String timestamp,
-                                               @RequestParam(value = "price", required = false) String price,
-                                               @RequestParam(value = "patient", required = false) Patient patient) {
-        Response response = taskService.updateTask(taskId, description, LocalDate.parse(timestamp), price, patient);
+                                               @RequestParam(value = "price", required = false) String price){
+        Response response = taskService.updateTask(taskId, description, price);
         return ResponseEntity.status(response.getStatusCode()).body(response);
     }
 
@@ -86,9 +84,8 @@ public class TaskController {
     @PutMapping("/completion-status/{taskId}")
     @PreAuthorize("hasAuthority('ADMIN') || hasAuthority('STAFF')")
     public ResponseEntity<Response> updateTaskCompletionStatus(
-            @PathVariable Long taskId,
-            @RequestParam boolean isCompleted) {
-        Response response = taskService.isTaskCompleted(taskId, isCompleted);
+            @PathVariable Long taskId) {
+        Response response = taskService.taskCompleted(taskId);
         return ResponseEntity.status(response.getStatusCode()).body(response);
     }
 

@@ -24,14 +24,10 @@ public interface ITaskService {
 
     Response updateTask (Long taskId,
                          String description,
-                         LocalDate timestamp,
-                         String price,
-                         Patient patient);
+                         String price);
 
 
-    Response isTaskCompleted (Long taskId, boolean isCompleted);
-
-
+    Response taskCompleted (Long taskId);
 
     }
 

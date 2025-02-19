@@ -99,4 +99,13 @@ public class PatientController {
         return ResponseEntity.status(response.getStatusCode()).body(response);
     }
 
+    @PutMapping("/update-patient-diagnosis/{patientId}")
+    @PreAuthorize("hasAuthority('ADMIN') || hasAuthority('STAFF')")
+    public ResponseEntity<Response> updatePatientDiagnosis(@PathVariable Long patientId,
+                                                           @RequestParam(value = "diagnosis", required = false) String diagnosis,
+                                                           @RequestParam(value = "condition", required = false) String condition) {
+        Response response = patientService.updatePatientDiagnosis(patientId, diagnosis, condition);
+        return ResponseEntity.status(response.getStatusCode()).body(response);
+    }
+
 }
