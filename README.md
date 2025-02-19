@@ -86,14 +86,14 @@ Below is the current status of API endpoints, indicating which tasks have been c
 | **/completion-status/task ID** | Admin/Staff | ✅ Completed | |
 
 ### **Image Management (`/image`)**
-| Task | Role | Result |
-|------|------|---------|
+| Task | Role | Result | Comment |
+|------|------|---------|---------|
 | **/add-image** | Admin/Staff | ✅ Completed |
 | **/get-image-by-id/image ID** | Admin/Staff | ✅ Completed |
 | **/get-all-images** | Admin/Staff | ✅ Completed |
 | **/get-images-by-patient-id/patient ID** | Admin/Staff | ✅ Completed |
-| **/delete-image-by-id/image ID** | Admin/Staff | ⚠️ Deletes image entity from mySQL, does not delete image from S3 |
-| **/update-image-by-id/image ID** | Admin/Staff | ⚠️ Partially works, image does not update |
+| **/delete-image-by-id/image ID** | Admin/Staff | ⚠️ Needs Update | Deletes image entity from mySQL, does not delete image from S3 |
+| **/update-image-by-id/image ID** | Admin/Staff | ⚠️ Needs Update | Partially works, image does not update |
 
 ---
 
