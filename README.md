@@ -77,7 +77,7 @@ Below is the current status of API endpoints, indicating which tasks have been c
 ### **Task Management (`/task`)**
 | Task | Role | Result | Comment |
 |------|------|---------|---------|
-| **/add-task** | Admin/Staff | ❌ Needs Update | When creating a task, need to enter manually staff ID and patient ID. But for patient, it should enter patient ID automatically. |
+| **/add-task** | Admin/Staff | ⚠️ Needs Update | When creating a task, need to enter manually staff ID and patient ID. But for patient, it should enter patient ID automatically. |
 | **/get-task-by-id/task ID** | Admin | ✅ Completed | |
 | **/get-all-tasks** | Admin | ✅ Completed | |
 | **/get-task-by-staff-id/staff ID** | Admin | ✅ Completed | |
@@ -89,19 +89,18 @@ Below is the current status of API endpoints, indicating which tasks have been c
 | Task | Role | Result |
 |------|------|---------|
 | **/add-image** | Admin/Staff | ✅ Completed |
-| **/get-image-by-id/image ID** | Admin/Staff | ❌ Fail |
-| **/get-all-images** | Admin/Staff | ❌ Fail |
-| **/get-images-by-patient-id/patient ID** | Admin/Staff | ❌ Fail |
-| **/delete-image-by-id/image ID** | Admin/Staff | ❌ Fail |
-| **/update-image-by-id/image ID** | Admin/Staff | ❌ Fail |
+| **/get-image-by-id/image ID** | Admin/Staff | ✅ Completed |
+| **/get-all-images** | Admin/Staff | ✅ Completed |
+| **/get-images-by-patient-id/patient ID** | Admin/Staff | ✅ Completed |
+| **/delete-image-by-id/image ID** | Admin/Staff | ⚠️ Deletes image entity from mySQL, does not delete image from S3 |
+| **/update-image-by-id/image ID** | Admin/Staff | ⚠️ Partially works, image does not update |
 
 ---
 
 ### **Legend**
 ✅ **Completed** → Fully functional  
-❌ **Needs Update** → Requires changes  
 ❌ **Fail** → Not working  
-
+⚠️ **Error** → Requires changes 
 ---
 
 
