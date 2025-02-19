@@ -1,24 +1,31 @@
-<h1>Health Care Clinic Application</h1>
+# Health Care Clinic Application
 
-<ul>Technologies Used</ul>
-<li>Java</li>
-<li>Spring Boot</li>
-<li>React</li>
-<li>MySQL</li>
-<li>AWS S3</li>
+## Technologies Used
+- **Java** (Backend)
+- **Spring Boot** (API & Business Logic)
+- **React** (Frontend)
+- **MySQL** (Database)
+- **AWS S3** (Storage for images)
 
+## Project Overview
+This application provides an online healthcare clinic management system with authentication and role-based access control for **users, staff, and patients**.
 
-<h2>Initial commit with authentication and functionality for users, staff, and patients.</h2>
+### ✅ **Currently Implemented Features**
+- **User Authentication** (Login, Registration)
+- **Staff Management** (CRUD operations, role management)
+- **Patient Management** (CRUD operations, patient records)
+- **Task Management** (Assigning tasks to staff and patients)
 
-<ul>Working:</ul>
-<li>User authentication</li>
-<li>Staff functionality</li>
-<li>Patient functionality</li>
-<li>Task functionality</li>
+### ⏳ **Pending Features**
+- **Image Management** (Uploading, fetching, updating, and deleting images)
+- **AWS S3 Integration** (To store and retrieve images securely)
 
-<ul>Pending</ul>
-<li>Image functionality</li>
-<li>AWS S3 integration</li>
+### **Next Steps**
+- Fix `/task/add-task` to automatically set patient ID when a patient creates a task.
+- Debug `/image/` related APIs to fix failures.
+- Optimize API response messages for better clarity.
+- Integrate AWS S3 for secure image storage.
+- Enhance security & validation for all user actions.
 
 # Healthcare Clinic API Documentation
 
@@ -97,10 +104,5 @@ Below is the current status of API endpoints, indicating which tasks have been c
 
 ---
 
-### **Next Steps**
-- Fix `/task/add-task` to automatically set patient ID when a patient creates a task.
-- Debug `/image/` related APIs to fix failures.
-- Optimize API response messages for better clarity.
 
----
 
