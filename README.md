@@ -104,4 +104,3 @@ Below is the current status of API endpoints, indicating which tasks have been c
 
 ---
 
-This table provides a clear overview of the API functionality and the work that still needs to be done.
