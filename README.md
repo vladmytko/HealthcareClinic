@@ -15,17 +15,11 @@ This application provides an online healthcare clinic management system with aut
 - **Staff Management** (CRUD operations, role management)
 - **Patient Management** (CRUD operations, patient records)
 - **Task Management** (Assigning tasks to staff and patients)
-
-### ⏳ **Pending Features**
 - **Image Management** (Uploading, fetching, updating, and deleting images)
 - **AWS S3 Integration** (To store and retrieve images securely)
 
-### **Next Steps**
-- Fix `/task/add-task` to automatically set patient ID when a patient creates a task.
-- Debug `/image/` related APIs to fix failures.
-- Optimize API response messages for better clarity.
-- Integrate AWS S3 for secure image storage.
-- Enhance security & validation for all user actions.
+### ⏳ **Pending Features**
+- **Web Frontend using React** 
 
 # Healthcare Clinic API Documentation
 
