@@ -13,6 +13,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.InputStream;
+import java.util.Arrays;
+import java.util.List;
+import java.util.UUID;
 
 
 @Service
@@ -25,28 +28,21 @@ public class AwsS3Service {
     @Value("${aws.s3.secret.key}")
     private String awsS3SecretKey;
 
+    // Allowed file extensions for security
+    private static final List<String> ALLOWED_EXTENSIONS = Arrays.asList("jpg", "jpeg", "png", "gif", "bmp", "webp");
+
     public String saveImageToS3(MultipartFile photo) {
-        String s3LocationImage = null;
 
         try {
-            String s3Filename = photo.getOriginalFilename();
+            // Validate file type (must be an image)
+            // Prevents malicious uploads like .exe, .bat, or disguised files (e.g., .jpg that is actually a script)
+            String contentType = photo.getContentType();
+            if(contentType == null || !contentType.startsWith("image/")) {
+                throw new OurException("Invalid file type. Only images are allowed");
+            }
 
-            BasicAWSCredentials awsCredentials = new BasicAWSCredentials(awsS3AccessKey,awsS3SecretKey);
-            AmazonS3 s3Client = AmazonS3ClientBuilder.standard()
-                    .withCredentials(new AWSStaticCredentialsProvider(awsCredentials))
-                    .withRegion(Regions.EU_NORTH_1)
-                    .build();
-
-            InputStream inputStream = photo.getInputStream();
-
-            ObjectMetadata metadata = new ObjectMetadata();
-            metadata.setContentType("image/jpeg");
-
-            PutObjectRequest putObjectRequest = new PutObjectRequest(bucketName, s3Filename, inputStream, metadata);
-            s3Client.putObject(putObjectRequest);
-            return  "https://"+bucketName+".s3.amazonaws.com/"+s3Filename;
-        } catch (Exception e) {
-            throw new OurException("Unable to upload image to s3 bucket" + e.getMessage());
-        }
-    }
-}
+            // Validate file extension
+            // Prevents users from renaming a harmful file (e.g., malware.exe -> malware.jpg
+            String originalFilename = photo.getOriginalFilename();
+            if(originalFilename == null || !isAllowedExtension(originalFilename)) {
+                throw new OurException("Invalid file extension. Allowed: " + ALL

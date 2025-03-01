@@ -1,21 +1,14 @@
-<h1>Health Care Clinic Application</h1>
+# Health Care Clinic Application
 
-<ul>Technologies Used</ul>
-<li>Java</li>
-<li>Spring Boot</li>
-<li>React</li>
-<li>MySQL</li>
-<li>AWS S3</li>
+## Technologies Used
+- **Java** (Backend)
+- **Spring Boot** (API & Business Logic)
+- **React** (Frontend)
+- **MySQL** (Database)
+- **AWS S3** (Storage for images)
 
+## Project Overview
+This application provides an online healthcare clinic management system with authentication and role-based access control for **users, staff, and patients**.
 
-<h2>Initial commit with authentication and functionality for users, staff, and patients.</h2>
-
-<ul>Working:</ul>
-<li>User authentication</li>
-<li>Staff functionality</li>
-<li>Patient functionality</li>
-
-<ul>Pending</ul>
-<li>Task functionality</li>
-<li>Image functionality</li>
-<li>AWS S3 integration</li>
+### ✅ **Currently Implemented Features**
+- **User Authentication** (Login, Re
