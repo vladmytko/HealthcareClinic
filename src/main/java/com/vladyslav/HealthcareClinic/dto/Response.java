@@ -1,9 +1,6 @@
 package com.vladyslav.HealthcareClinic.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.vladyslav.HealthcareClinic.entity.Patient;
-import com.vladyslav.HealthcareClinic.entity.Staff;
-import com.vladyslav.HealthcareClinic.entity.Task;
 import lombok.Data;
 
 import java.util.List;
@@ -30,6 +27,13 @@ public class Response {
     private List<PatientDTO> patientList;
     private List<TaskDTO> taskList;
     private List<ImageDTO> imageList;
+
+    public Response(){};
+
+    public Response(int statusCode, String message){
+        this.statusCode = statusCode;
+        this.message = message;
+    }
 
 
     // GETTERS AND SETTERS

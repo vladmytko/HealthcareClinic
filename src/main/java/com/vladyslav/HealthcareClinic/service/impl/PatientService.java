@@ -11,10 +11,13 @@ import com.vladyslav.HealthcareClinic.service.interfac.IPatientService;
 import com.vladyslav.HealthcareClinic.utils.JWTUtils;
 import com.vladyslav.HealthcareClinic.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class PatientService implements IPatientService {
@@ -169,7 +172,56 @@ public class PatientService implements IPatientService {
     }
 
     @Override
-    public Response updatePatient(Long patientId, String firstName, String lastName, String address, String email, String phoneNumber, LocalDate dateOfBirth) {
+    public Response updatePatient(Long patientId, String firstName, String lastName, String address, String email, String phoneNumber, LocalDate dateOfBirth, String diagnosis, String condition) {
+        Response response = new Response();
+
+        try {
+            // Fetch patient details from database
+            Patient patient = patientRepository.findById(patientId).orElseThrow(() -> new OurException("User Not Found"));
+
+            // Update the patient's details
+            if (firstName != null) patient.setFirstName(firstName);
+            if (lastName != null) patient.setLastName(lastName);
+            if (address != null) patient.setAddress(address);
+            if (email != null) {
+                User user = userRepository.findById(patient.getUser().getId()).orElseThrow(() -> new OurException("User Not Found"));
+                patient.setEmail(email);
+                user.setEmail(email);
+                userRepository.save(user);
+            }
+            if (phoneNumber != null) patient.setPhoneNumber(phoneNumber);
+            if (dateOfBirth != null) {
+                patient.setDateOfBirth(dateOfBirth);
+            } else {
+                patient.setDateOfBirth(patient.getDateOfBirth());
+            }
+            if(diagnosis != null) patient.setDiagnosis(diagnosis);
+            if(condition != null) patient.setConditions(condition);
+
+
+            // Save the updated patient
+            Patient updatedPatient = patientRepository.save(patient);
+
+            // Map the updated patient to a DTO
+            PatientDTO patientDTO = Utils.mapPatientEntityToPatientDTO(updatedPatient);
+
+            response.setStatusCode(200);
+            response.setMessage("Successful");
+            response.setPatientDTO(patientDTO);
+
+        } catch (OurException e) {
+            response.setStatusCode(400);
+            response.setMessage(e.getMessage());
+        } catch (Exception e) {
+            response.setStatusCode(500);
+            response.setMessage("Error updating patient " + e.getMessage());
+        }
+
+        return response;
+    }
+
+    @Override
+    public Response updateSelfPatient(Long patientId, String firstName, String lastName, String address, String email, String phoneNumber, LocalDate dateOfBirth) {
         Response response = new Response();
 
         try {
@@ -247,4 +299,13 @@ public class PatientService implements IPatientService {
         return response;
 
     }
+
+    /**
+     * Retrieves the logged-in patient's ID from the JWT token.
+     */
+    public Long getPatientIdByEmail(String email) {
+        Optional<Patient> patient = patientRepository.findByEmail(email);
+        return patient.map(Patient::getId).orElse(null);
+    }
+
 }

@@ -25,10 +25,23 @@ public interface IPatientService {
                            String address,
                            String email,
                            String phoneNumber,
-                           LocalDate dateOfBirth
+                           LocalDate dateOfBirth,
+                           String diagnosis,
+                           String condition
                            );
 
+    Response updateSelfPatient(Long patientId,
+                           String firstName,
+                           String lastName,
+                           String address,
+                           String email,
+                           String phoneNumber,
+                           LocalDate dateOfBirth
+    );
+
     Response updatePatientDiagnosis(Long patientId, String diagnosis, String condition);
+
+    Long getPatientIdByEmail(String email);
 
 
 

@@ -3,12 +3,14 @@ package com.vladyslav.HealthcareClinic.controller;
 import com.vladyslav.HealthcareClinic.dto.Response;
 import com.vladyslav.HealthcareClinic.service.interfac.IPatientService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.util.Map;
 
@@ -68,33 +70,70 @@ public class PatientController {
         return ResponseEntity.status(response.getStatusCode()).body(response);
     }
 
-
-    // Maybe need to use authenticated patient in this case to let patient update its details
-    @PutMapping("/update-patient/{patientId}")
-    // @PreAuthorize("hasAuthority('ADMIN') || hasAuthority('STAFF')")
+    // Update patient details method from ADMIN and STAFF, requires manually enter patient ID
+    @PatchMapping("/update-patient/{patientId}")
+    @PreAuthorize("hasAuthority('ADMIN') || hasAuthority('STAFF')")
     public ResponseEntity<Response> updatePatient(@PathVariable Long patientId,
-                                                  @RequestParam(value = "firstName", required = false) String firstName,
-                                                  @RequestParam(value = "lastName", required = false) String lastName,
-                                                  @RequestParam(value = "address", required = false) String address,
-                                                  @RequestParam(value = "email", required = false) String email,
-                                                  @RequestParam(value = "phoneNumber", required = false) String phoneNumber,
-                                                  @RequestParam(value = "dateOfBirth", required = false) LocalDate dateOfBirth) {
+                                                  @RequestBody Map<String, String> requestBody) {
 
+        String firstName = requestBody.get("firstName");
+        String lastName = requestBody.get("lastName");
+        String address = requestBody.get("address");
+        String email = requestBody.get("email");
+        String phoneNumber = requestBody.get("phoneNumber");
+        String dateOfBirthStr = requestBody.get("dateOfBirth");
+        String diagnosis = requestBody.get("diagnosis");
+        String condition = requestBody.get("condition");
 
+        // Handle data parsing safety
+        LocalDate dateOfBirth = null;
+        if(dateOfBirthStr != null && !dateOfBirthStr.isEmpty()) {
+            try{
+                dateOfBirth = LocalDate.parse(dateOfBirthStr);
+            } catch (DateTimeException e) {
+                return  ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new Response(400, "Invalid date format. Use YYYY-MM-DD."));
+            }
+        }
 
-        Response response = patientService.updatePatient(patientId, firstName, lastName, address, email, phoneNumber, dateOfBirth);
+        Response response = patientService.updatePatient(patientId, firstName, lastName, address, email, phoneNumber, dateOfBirth, diagnosis, condition);
         return ResponseEntity.status(response.getStatusCode()).body(response);
     }
 
 
-    @PatchMapping("/update-patient-diagnosis/{patientId}")
-    @PreAuthorize("hasAuthority('ADMIN') || hasAuthority('STAFF')")
-    public ResponseEntity<Response> updatePatientDiagnosis(@PathVariable Long patientId, @RequestBody Map<String,String> requestBody) {
+    // Update method for patient, it automatically gets logged in patient details and give assess to make updates
+    @PatchMapping("/update-self-patient")
+    @PreAuthorize("hasAuthority('PATIENT')")
+    public ResponseEntity<Response> updateSelfPatient(@RequestBody Map<String, String> requestBody) {
 
-        String diagnosis = requestBody.get("diagnosis");
-        String condition = requestBody.get("condition");
+        // Get patient ID automatically from the JWT token
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String fetchedEmail = authentication.getName(); // Get email from JWT token
+        Long patientId = patientService.getPatientIdByEmail(fetchedEmail); // Find patient ID
 
-        Response response = patientService.updatePatientDiagnosis(patientId, diagnosis, condition);
+
+        if (patientId == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response(400, "Patient not found"));
+        }
+
+
+        String firstName = requestBody.get("firstName");
+        String lastName = requestBody.get("lastName");
+        String address = requestBody.get("address");
+        String email = requestBody.get("email");
+        String phoneNumber = requestBody.get("phoneNumber");
+        String dateOfBirthStr = requestBody.get("dateOfBirth");
+
+        // Handle data parsing safety
+        LocalDate dateOfBirth = null;
+        if(dateOfBirthStr != null && !dateOfBirthStr.isEmpty()) {
+            try{
+                dateOfBirth = LocalDate.parse(dateOfBirthStr);
+            } catch (DateTimeException e) {
+                return  ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new Response(400, "Invalid date format. Use YYYY-MM-DD."));
+            }
+        }
+
+        Response response = patientService.updateSelfPatient(patientId, firstName, lastName, address, email, phoneNumber, dateOfBirth);
         return ResponseEntity.status(response.getStatusCode()).body(response);
     }
 
