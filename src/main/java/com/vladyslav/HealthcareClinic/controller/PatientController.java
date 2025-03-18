@@ -1,7 +1,6 @@
 package com.vladyslav.HealthcareClinic.controller;
 
 import com.vladyslav.HealthcareClinic.dto.Response;
-import com.vladyslav.HealthcareClinic.entity.Patient;
 import com.vladyslav.HealthcareClinic.service.interfac.IPatientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -19,12 +18,6 @@ public class PatientController {
 
     @Autowired
     private IPatientService patientService;
-
-//    @PostMapping("/add-patient")
-//    public ResponseEntity<Response> addPatient(@RequestBody Patient patient) {
-//        Response response = patientService.addPatient(patient);
-//        return ResponseEntity.status(response.getStatusCode()).body(response);
-//    }
 
     @GetMapping("/get-patient-by-id/{patientId}")
     @PreAuthorize("hasAuthority('ADMIN') || hasAuthority('STAFF')")
@@ -93,14 +86,6 @@ public class PatientController {
         return ResponseEntity.status(response.getStatusCode()).body(response);
     }
 
-//    @PutMapping("/update-patient-diagnosis/{patientId}")
-//    @PreAuthorize("hasAuthority('ADMIN') || hasAuthority('STAFF')")
-//    public ResponseEntity<Response> updatePatientDiagnosis(@PathVariable Long patientId,
-//                                                           @RequestParam(value = "diagnosis", required = false) String diagnosis,
-//                                                           @RequestParam(value = "condition", required = false) String condition) {
-//        Response response = patientService.updatePatientDiagnosis(patientId, diagnosis, condition);
-//        return ResponseEntity.status(response.getStatusCode()).body(response);
-//    }
 
     @PatchMapping("/update-patient-diagnosis/{patientId}")
     @PreAuthorize("hasAuthority('ADMIN') || hasAuthority('STAFF')")
