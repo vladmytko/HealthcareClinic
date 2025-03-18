@@ -102,3 +102,5 @@ Below is the current status of API endpoints, indicating which tasks have been c
 | **fake.jpg(but really a .exe)** | image.jpeg               | ❌ No                  | Renamed exacutable file | ✅ Completed       |
 | **logo.pdf**                    | application.octet-stream | ❌ No | Unrecognised extension  | ✅ Completed       |
 | **profile.bmp**                 | image/bmp                | ✅ Yes             | Allowed image format    | ✅ Completed       |
+
+

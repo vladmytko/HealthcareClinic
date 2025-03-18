@@ -247,27 +247,4 @@ public class PatientService implements IPatientService {
         return response;
 
     }
-
-    @Override
-    public Response getPatientInfo(String email) {
-
-        Response response = new Response();
-
-        try {
-            Patient patient = patientRepository.findByEmail(email).orElseThrow(() -> new OurException("User Not Found"));
-            PatientDTO patientDTO = Utils.mapPatientEntityToPatientDTO(patient);
-
-            response.setStatusCode(200);
-            response.setMessage("successful");
-            response.setPatientDTO(patientDTO);
-        } catch (OurException e) {
-            response.setStatusCode(400);
-            response.setMessage(e.getMessage());
-        } catch (Exception e) {
-            response.setStatusCode(500);
-            response.setMessage("Error getting patient information " + e.getMessage());
-        }
-
-        return response;
-    }
 }

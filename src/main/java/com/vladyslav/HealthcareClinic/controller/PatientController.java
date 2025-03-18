@@ -11,6 +11,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/patient")
@@ -53,13 +54,6 @@ public class PatientController {
         return ResponseEntity.status(response.getStatusCode()).body(response);
     }
 
-    @GetMapping("/get-patients-info/{email}")
-    @PreAuthorize("hasAuthority('ADMIN') || hasAuthority('STAFF')")
-    public ResponseEntity<Response> getPatientInfo(@PathVariable String email) {
-        Response response = patientService.getPatientInfo(email);
-        return ResponseEntity.status(response.getStatusCode()).body(response);
-    }
-
     @GetMapping("/get-logged-in-patients-info")
     public ResponseEntity<Response> getLoggedInPatientInfoByEmail() {
 
@@ -68,7 +62,7 @@ public class PatientController {
         String email = authentication.getName();
 
         // Call the service to fetch staff info
-        Response response = patientService.getPatientInfo(email);
+        Response response = patientService.getPatientByEmail(email);
 
         // Return the response with the appropriate HTTP status code
         return ResponseEntity.status(response.getStatusCode()).body(response);
@@ -99,11 +93,22 @@ public class PatientController {
         return ResponseEntity.status(response.getStatusCode()).body(response);
     }
 
-    @PutMapping("/update-patient-diagnosis/{patientId}")
+//    @PutMapping("/update-patient-diagnosis/{patientId}")
+//    @PreAuthorize("hasAuthority('ADMIN') || hasAuthority('STAFF')")
+//    public ResponseEntity<Response> updatePatientDiagnosis(@PathVariable Long patientId,
+//                                                           @RequestParam(value = "diagnosis", required = false) String diagnosis,
+//                                                           @RequestParam(value = "condition", required = false) String condition) {
+//        Response response = patientService.updatePatientDiagnosis(patientId, diagnosis, condition);
+//        return ResponseEntity.status(response.getStatusCode()).body(response);
+//    }
+
+    @PatchMapping("/update-patient-diagnosis/{patientId}")
     @PreAuthorize("hasAuthority('ADMIN') || hasAuthority('STAFF')")
-    public ResponseEntity<Response> updatePatientDiagnosis(@PathVariable Long patientId,
-                                                           @RequestParam(value = "diagnosis", required = false) String diagnosis,
-                                                           @RequestParam(value = "condition", required = false) String condition) {
+    public ResponseEntity<Response> updatePatientDiagnosis(@PathVariable Long patientId, @RequestBody Map<String,String> requestBody) {
+
+        String diagnosis = requestBody.get("diagnosis");
+        String condition = requestBody.get("condition");
+
         Response response = patientService.updatePatientDiagnosis(patientId, diagnosis, condition);
         return ResponseEntity.status(response.getStatusCode()).body(response);
     }

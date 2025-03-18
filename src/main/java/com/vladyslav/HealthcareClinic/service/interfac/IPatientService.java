@@ -17,8 +17,6 @@ public interface IPatientService {
 
     Response getAllPatients();
 
-    Response getPatientInfo(String email);
-
     Response deletePatientById(Long patientId);
 
     Response updatePatient(Long patientId,

@@ -21,18 +21,22 @@ import java.util.UUID;
 public class AwsS3Service {
     private final String bucketName = "mutko95-hotel-images";
 
+    // Inject the AWS access key from application properties
     @Value("${aws.s3.access.key}")
     private String awsS3AccessKey;
 
+    // Inject the AWS secret key from application properties
     @Value("${aws.s3.secret.key}")
     private String awsS3SecretKey;
+
+    // Improvement: AWS credentials should be stored in environment variables or a credentials file. 
 
     // Define allowed file extensions for security
     private static final List<String> ALLOWED_EXTENSIONS = Arrays.asList("jpg", "jpeg", "png", "gif", "bmp", "webp");
 
     public String saveImageToS3(MultipartFile photo) {
         try {
-            // Validate file type (must be an image)
+            // Validate file type (must be an image). Checks MIME type
             String contentType = photo.getContentType();
             if (contentType == null || !contentType.startsWith("image/")) {
                 throw new OurException("Invalid file type. Only images are allowed.");
@@ -44,7 +48,7 @@ public class AwsS3Service {
                 throw new OurException("Invalid file extension. Allowed: " + ALLOWED_EXTENSIONS);
             }
 
-            // Prevent overwriting files: Use unique filename with UUID
+            // Prevent overwriting files: Use unique filename with UUID. Example photo.jpg -> f3a9b123-4567-89ab-cdef-123456789abc.jpg
             String fileExtension = originalFilename.substring(originalFilename.lastIndexOf("."));
             String s3Filename = UUID.randomUUID() + fileExtension;
 

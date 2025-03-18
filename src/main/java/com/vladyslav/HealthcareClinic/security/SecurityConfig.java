@@ -19,42 +19,52 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-@Configuration
-@EnableMethodSecurity
-@EnableWebSecurity
+
+/**
+ * Security configuration class for handling authentication and authorization.
+ * It sets up JWT authentication and configures access control for different endpoints.
+ */
+@Configuration // Marks this class as a configuration class
+@EnableMethodSecurity // Enables method-level security
+@EnableWebSecurity // Enables Spring Security
 public class SecurityConfig {
 
     @Autowired
-    private CustomUserDetailService customUserDetailService;
+    private CustomUserDetailService customUserDetailService; // Service to load user details from the database
 
     @Autowired
-    private JWTAuthFilter jwtAuthFilter;
+    private JWTAuthFilter jwtAuthFilter; // JWT filter for authentication
 
+    // Configures security settings including authentication, authorisation, and JWT filtering
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
-        httpSecurity.csrf(AbstractHttpConfigurer::disable)
-                .cors(Customizer.withDefaults())
+        httpSecurity.csrf(AbstractHttpConfigurer::disable) // Disables CSRF protection (JWT does not rely on session-based authentication)
+                .cors(Customizer.withDefaults()) // Enables default Cross-Origin Resource Sharing (CORS) settings (useful when frontend and backend are separate)
                 .authorizeHttpRequests(request -> request
-                        .requestMatchers("/auth/**").permitAll() //Public endpoints
-                        .requestMatchers("/patient/**", "/users/**", "/staff/**", "/task/**", "/image/**").authenticated()) //Require authentication
+                        .requestMatchers("/auth/**").permitAll() // Allow public access to authentication endpoints
+                        .requestMatchers("/patient/**", "/users/**", "/staff/**", "/task/**", "/image/**").authenticated()) // Require authentication for these endpoints
                         .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
-        return httpSecurity.build();
+        return httpSecurity.build(); // Apply JWT filter before username/password authentication
     }
 
+     // Configures authentication provider using DaoAuthenticationProvider.
+     // This provider is responsible for fetching user details and verifying passwords.
     @Bean
     public AuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
-        daoAuthenticationProvider.setUserDetailsService(customUserDetailService);
-        daoAuthenticationProvider.setPasswordEncoder(passwordEncoder());
+        daoAuthenticationProvider.setUserDetailsService(customUserDetailService); // Use custom user details service
+        daoAuthenticationProvider.setPasswordEncoder(passwordEncoder()); // Set password encoder
         return daoAuthenticationProvider;
     }
 
+    // Password encoding using BCrypt hashing algorithm.
     @Bean
     public PasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();
     }
 
+    // Authentication manager to that manages authentication requests.
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
