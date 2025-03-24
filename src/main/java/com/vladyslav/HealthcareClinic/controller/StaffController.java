@@ -6,11 +6,16 @@ import com.vladyslav.HealthcareClinic.entity.Staff;
 import com.vladyslav.HealthcareClinic.service.interfac.IStaffService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.DateTimeException;
+import java.time.LocalDate;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/staff")
@@ -61,15 +66,64 @@ public class StaffController {
         return ResponseEntity.status(response.getStatusCode()).body(response);
     }
 
-    @PutMapping("/update-staff/{staffId}")
-    @PreAuthorize("hasAuthority('ADMIN') || hasAuthority('STAFF')")
+    @PatchMapping("/update-staff/{staffId}")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<Response> updateStaff(@PathVariable Long staffId,
-                                                @RequestParam(value = "firstName", required = false) String firstName,
-                                                @RequestParam(value = "lastName", required = false) String lastName,
-                                                @RequestParam(value = "email", required = false) String email,
-                                                @RequestParam(value = "phoneNumber", required = false) String phoneNumber,
-                                                @RequestParam(value = "specialisation", required = false) String specialisation) {
-        Response response = staffService.updateStaff(staffId, firstName, lastName, email, phoneNumber, specialisation);
+                                                @RequestBody Map<String,String> requestBody) {
+
+        String firstName = requestBody.get("firstName");
+        String lastName = requestBody.get("lastName");
+        String email = requestBody.get("email");
+        String phoneNumber = requestBody.get("phoneNumber");
+        String address = requestBody.get("address");
+        String dateOfBirthStr = requestBody.get("dateOfBirth");
+        String specialisation = requestBody.get("specialisation");
+
+        // Handle date parsing safety
+        LocalDate dateOfBirth = null;
+        if(dateOfBirthStr != null && !dateOfBirthStr.isEmpty()) {
+            try{
+                dateOfBirth = LocalDate.parse(dateOfBirthStr);
+            } catch (DateTimeException e) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new Response(400, "Invalid date format. Use YYYY-MM-DD."));
+            }
+        }
+
+        Response response = staffService.updateStaff(staffId, firstName, lastName, email, phoneNumber, address, dateOfBirth, specialisation);
+        return ResponseEntity.status(response.getStatusCode()).body(response);
+    }
+
+    // Update method for staff, system automatically gets staff id and provides ability to edit account based on id
+    @PatchMapping("/update-self-staff")
+    @PreAuthorize("hasAuthority('STAFF')")
+    public ResponseEntity<Response> updateSelfStaff(@RequestBody Map<String,String> requestBody) {
+
+        // Get staff ID of logged in staff from JWT token
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String fetchedEmail = authentication.getName(); // Get email from JWT token
+        Long staffId = staffService.getStaffIdByEmail(fetchedEmail);
+
+        if(staffId == null){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response(400, "Staff not found"));
+        }
+
+        String firstName = requestBody.get("firstName");
+        String lastName = requestBody.get("lastName");
+        String phoneNumber = requestBody.get("phoneNumber");
+        String address = requestBody.get("address");
+        String dateOfBirthStr = requestBody.get("dateOfBirth");
+
+        // Handle date parsing safety
+        LocalDate dateOfBirth = null;
+        if(dateOfBirthStr != null && !dateOfBirthStr.isEmpty()) {
+            try{
+                dateOfBirth = LocalDate.parse(dateOfBirthStr);
+            } catch (DateTimeException e) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new Response(400, "Invalid date format. Use YYYY-MM-DD."));
+            }
+        }
+
+        Response response = staffService.updateSelfStaff(staffId, firstName, lastName, phoneNumber, address, dateOfBirth);
         return ResponseEntity.status(response.getStatusCode()).body(response);
     }
 
@@ -102,10 +156,5 @@ public class StaffController {
         // Return the response with the appropriate HTTP status code
         return ResponseEntity.status(response.getStatusCode()).body(response);
     }
-
-
-
-
-
 
 }

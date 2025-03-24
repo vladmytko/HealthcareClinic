@@ -4,6 +4,8 @@ import com.vladyslav.HealthcareClinic.dto.RegisterStaffRequest;
 import com.vladyslav.HealthcareClinic.dto.Response;
 import com.vladyslav.HealthcareClinic.entity.Staff;
 
+import java.time.LocalDate;
+
 public interface IStaffService {
 
     Response addStaff(RegisterStaffRequest registerStaffRequest);
@@ -18,8 +20,24 @@ public interface IStaffService {
 
     Response deleteStaffById(Long staffId);
 
-    Response updateStaff(Long staffId, String firstName, String lastName, String email, String phoneNumber, String specialisation);
+    Response updateStaff(Long staffId,
+                         String firstName,
+                         String lastName,
+                         String email,
+                         String phoneNumber,
+                         String address,
+                         LocalDate dateOfBirth,
+                         String specialisation);
 
+    Response updateSelfStaff(Long patientId,
+                             String firstName,
+                             String lastName,
+                             String phoneNumber,
+                             String address,
+                             LocalDate dateOfBirth);
+
+    Long getStaffIdByEmail(String email);
+;
     Response getStaffInfoById(Long staffId);
 
     Response getStaffInfoByEmail(String email);

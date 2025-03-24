@@ -14,7 +14,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class StaffService  implements IStaffService {
@@ -241,7 +243,7 @@ public class StaffService  implements IStaffService {
     }
 
     @Override
-    public Response updateStaff(Long staffId, String firstName, String lastName, String email, String phoneNumber, String specialisation) {
+    public Response updateStaff(Long staffId, String firstName, String lastName, String email, String phoneNumber, String address, LocalDate dateOfBirth, String specialisation) {
 
         Response response = new Response();
 
@@ -259,8 +261,52 @@ public class StaffService  implements IStaffService {
 
                 userRepository.save(user);
             }
+            if(address != null) staff.setAddress(address);
+            if(dateOfBirth != null) staff.setDateOfBirth(dateOfBirth);
             if(phoneNumber != null) staff.setPhoneNumber(phoneNumber);
             if(specialisation != null) staff.setSpecialisation(specialisation);
+
+            // Save updated staff entity
+            Staff updatedStaff = staffRepository.save(staff);
+
+            // Map the updated staff to DTO
+            StaffDTO staffDTO = Utils.mapStaffEntityToStaffDTO(updatedStaff);
+
+            // Set response
+            response.setStatusCode(200);
+            response.setMessage("successful");
+            response.setStaffDTO(staffDTO);
+
+        } catch (OurException e) {
+
+            // Handle custom exception
+            response.setStatusCode(404);
+            response.setMessage(e.getMessage());
+        } catch (Exception e) {
+
+            // Handle unexpected error
+            response.setStatusCode(500);
+            response.setMessage("Error updating staff account " + e.getMessage());
+        }
+
+        return response;
+    }
+
+    @Override
+    public Response updateSelfStaff(Long staffId, String firstName, String lastName, String phoneNumber, String address, LocalDate dateOfBirth) {
+
+        Response response = new Response();
+
+        try {
+            // Fetch staff entity from database
+            Staff staff = staffRepository.findById(staffId).orElseThrow(() -> new OurException("User Not Found"));
+
+            // Update the staff details
+            if(firstName != null) staff.setFirstName(firstName);
+            if(lastName != null) staff.setLastName(lastName);
+            if(address != null) staff.setAddress(address);
+            if(dateOfBirth != null) staff.setDateOfBirth(dateOfBirth);
+            if(phoneNumber != null) staff.setPhoneNumber(phoneNumber);
 
             // Save updated staff entity
             Staff updatedStaff = staffRepository.save(staff);
@@ -330,5 +376,13 @@ public class StaffService  implements IStaffService {
         }
 
         return response;
+    }
+
+    /**
+     * Retrieves the logged-in patient's ID from the JWT token.
+     */
+    public Long getStaffIdByEmail(String email) {
+        Optional<Staff> staff = staffRepository.findByEmail(email);
+        return staff.map(Staff::getId).orElse(null);
     }
 }

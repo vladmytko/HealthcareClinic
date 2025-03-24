@@ -13,7 +13,7 @@ public interface StaffRepository extends JpaRepository<Staff, Long> {
     boolean existsByEmail(String email);
 
     @Query("SELECT s FROM Staff s WHERE LOWER(s.email) = LOWER(:email)")
-    Optional<Staff> findByEmail(String email);
+    Optional<Staff> findByEmail(@Param("email") String email);
 
     @Query("SELECT s FROM Staff s WHERE s.firstName = :firstName AND s.lastName = :lastName")
     Optional<Staff> findByName(@Param("firstName") String firstName, @Param("lastName") String lastName);
