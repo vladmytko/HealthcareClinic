@@ -1,4 +1,4 @@
-package com.vladyslav.HealthcareClinic.dto;
+package com.vladyslav.HealthcareClinic.dto.requests;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;

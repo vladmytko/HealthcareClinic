@@ -1,8 +1,7 @@
 package com.vladyslav.HealthcareClinic.controller;
 
-import com.vladyslav.HealthcareClinic.dto.RegisterStaffRequest;
-import com.vladyslav.HealthcareClinic.dto.Response;
-import com.vladyslav.HealthcareClinic.entity.Staff;
+import com.vladyslav.HealthcareClinic.dto.requests.RegisterStaffRequest;
+import com.vladyslav.HealthcareClinic.dto.response.Response;
 import com.vladyslav.HealthcareClinic.service.interfac.IStaffService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -127,12 +126,6 @@ public class StaffController {
         return ResponseEntity.status(response.getStatusCode()).body(response);
     }
 
-    @GetMapping("/get-staff-info-by-id/{staffId}")
-    @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<Response> getStaffInfoById(@PathVariable Long staffId) {
-        Response response = staffService.getStaffInfoById(staffId);
-        return ResponseEntity.status(response.getStatusCode()).body(response);
-    }
 
     @GetMapping("/get-staff-info-by-email/{email}")
     @PreAuthorize("hasAuthority('ADMIN') || hasAuthority('STAFF')")

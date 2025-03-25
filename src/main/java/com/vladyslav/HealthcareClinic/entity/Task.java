@@ -9,7 +9,6 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @Entity
 @Data
@@ -29,7 +28,7 @@ public class Task {
     @NotBlank(message = "Price is required")
     private String price;
 
-    private boolean isCompleted;
+    private boolean isCompleted = false;
 
     @ManyToOne
     @JoinColumn(name = "patient_id", referencedColumnName = "id", nullable = false)
@@ -96,6 +95,6 @@ public class Task {
     }
 
     public void setCompleted(boolean completed) {
-        isCompleted = completed;
+        this.isCompleted = completed;
     }
 }

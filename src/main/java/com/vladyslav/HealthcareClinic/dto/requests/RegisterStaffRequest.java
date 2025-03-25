@@ -1,4 +1,4 @@
-package com.vladyslav.HealthcareClinic.dto;
+package com.vladyslav.HealthcareClinic.dto.requests;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.Email;

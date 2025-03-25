@@ -1,14 +1,14 @@
 package com.vladyslav.HealthcareClinic.service.impl;
 
 import com.vladyslav.HealthcareClinic.dto.*;
-import com.vladyslav.HealthcareClinic.entity.Patient;
+import com.vladyslav.HealthcareClinic.dto.requests.RegisterStaffRequest;
+import com.vladyslav.HealthcareClinic.dto.response.Response;
 import com.vladyslav.HealthcareClinic.entity.Staff;
 import com.vladyslav.HealthcareClinic.entity.User;
 import com.vladyslav.HealthcareClinic.exception.OurException;
 import com.vladyslav.HealthcareClinic.repo.StaffRepository;
 import com.vladyslav.HealthcareClinic.repo.UserRepository;
 import com.vladyslav.HealthcareClinic.service.interfac.IStaffService;
-import com.vladyslav.HealthcareClinic.utils.JWTUtils;
 import com.vladyslav.HealthcareClinic.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;

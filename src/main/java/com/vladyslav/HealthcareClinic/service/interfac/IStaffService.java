@@ -1,8 +1,7 @@
 package com.vladyslav.HealthcareClinic.service.interfac;
 
-import com.vladyslav.HealthcareClinic.dto.RegisterStaffRequest;
-import com.vladyslav.HealthcareClinic.dto.Response;
-import com.vladyslav.HealthcareClinic.entity.Staff;
+import com.vladyslav.HealthcareClinic.dto.requests.RegisterStaffRequest;
+import com.vladyslav.HealthcareClinic.dto.response.Response;
 
 import java.time.LocalDate;
 

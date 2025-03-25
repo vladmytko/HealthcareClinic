@@ -1,6 +1,6 @@
 package com.vladyslav.HealthcareClinic.service.impl;
 
-import com.vladyslav.HealthcareClinic.dto.Response;
+import com.vladyslav.HealthcareClinic.dto.response.Response;
 import com.vladyslav.HealthcareClinic.dto.TaskDTO;
 import com.vladyslav.HealthcareClinic.dto.requests.TaskRequest;
 import com.vladyslav.HealthcareClinic.entity.Patient;
@@ -15,7 +15,6 @@ import com.vladyslav.HealthcareClinic.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -276,7 +275,7 @@ public class TaskService implements ITaskService {
     }
 
     @Override
-    public Response taskCompleted(Long taskId) {
+    public Response markTaskAsCompleted(Long taskId, Boolean completed) {
 
         Response response = new Response();
 
@@ -285,7 +284,7 @@ public class TaskService implements ITaskService {
             Task task = taskRepository.findById(taskId).orElseThrow(()-> new OurException("Task Not Found"));
 
             // Update 'isCompleted'
-            task.setCompleted(true);
+            task.setCompleted(completed);
 
             // Save updated task
             Task updatedTask = taskRepository.save(task);

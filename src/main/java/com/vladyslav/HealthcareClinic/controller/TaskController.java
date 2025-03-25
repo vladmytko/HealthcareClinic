@@ -1,12 +1,10 @@
 package com.vladyslav.HealthcareClinic.controller;
 
-import com.vladyslav.HealthcareClinic.dto.Response;
+import com.vladyslav.HealthcareClinic.dto.requests.TaskCompletionRequest;
+import com.vladyslav.HealthcareClinic.dto.response.Response;
 import com.vladyslav.HealthcareClinic.dto.requests.TaskRequest;
-import com.vladyslav.HealthcareClinic.entity.Patient;
-import com.vladyslav.HealthcareClinic.entity.Staff;
-import com.vladyslav.HealthcareClinic.entity.User;
-import com.vladyslav.HealthcareClinic.repo.StaffRepository;
-import com.vladyslav.HealthcareClinic.repo.UserRepository;
+import com.vladyslav.HealthcareClinic.service.interfac.IPatientService;
+import com.vladyslav.HealthcareClinic.service.interfac.IStaffService;
 import com.vladyslav.HealthcareClinic.service.interfac.ITaskService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,8 +14,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
-import java.util.Optional;
+import java.util.Map;
+
 
 @RestController
 @RequestMapping("/task")
@@ -25,6 +23,12 @@ public class TaskController {
 
     @Autowired
     private ITaskService taskService;
+
+    @Autowired
+    private IPatientService patientService;
+
+    @Autowired
+    private IStaffService staffService;
 
 
     @PostMapping("/add-task")
@@ -70,23 +74,58 @@ public class TaskController {
         return ResponseEntity.status(response.getStatusCode()).body(response);
     }
 
-    @PutMapping("/update-task/{taskId}")
+    @PatchMapping("/update-task/{taskId}")
     @PreAuthorize("hasAuthority('ADMIN') || hasAuthority('STAFF')")
     public ResponseEntity<Response> updateTask(@PathVariable Long taskId,
-                                               @RequestParam(value = "description", required = false) String description,
-                                               @RequestParam(value = "price", required = false) String price){
+                                               @RequestBody Map<String,String> requestBody){
+
+        String description = requestBody.get("description");
+        String price = requestBody.get("price");
+
         Response response = taskService.updateTask(taskId, description, price);
         return ResponseEntity.status(response.getStatusCode()).body(response);
     }
 
-
-
-    @PutMapping("/completion-status/{taskId}")
+    @PatchMapping("/complete-task/{taskId}")
     @PreAuthorize("hasAuthority('ADMIN') || hasAuthority('STAFF')")
-    public ResponseEntity<Response> updateTaskCompletionStatus(
-            @PathVariable Long taskId) {
-        Response response = taskService.taskCompleted(taskId);
+    public ResponseEntity<Response> markTaskAsCompleted(@PathVariable Long taskId,
+                                                        @RequestBody TaskCompletionRequest request) {
+
+        Boolean completed = request.getCompleted();
+
+        if(completed == null) {
+            return ResponseEntity.badRequest().body(new Response(400,"Completed status is required"));
+        }
+
+        Response response = taskService.markTaskAsCompleted(taskId, completed);
         return ResponseEntity.status(response.getStatusCode()).body(response);
     }
 
+
+    // Staff and User retrieving tasks automatically
+
+    @GetMapping("/patient-tasks")
+    @PreAuthorize("hasAuthority('PATIENT')")
+    public ResponseEntity<Response> getPatientTasks() {
+        // Get patient ID automatically from the JWT token
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String fetchedEmail = authentication.getName(); // Get email from JWT token
+        Long patientId = patientService.getPatientIdByEmail(fetchedEmail); // Find patient ID
+
+        Response response = taskService.getTaskByPatientId(patientId);
+        return ResponseEntity.status(response.getStatusCode()).body(response);
+    }
+
+    @GetMapping("/staff-tasks")
+    @PreAuthorize("hasAuthority('STAFF')")
+    public ResponseEntity<Response> getStaffTasks() {
+
+        // Get staff ID automatically from the JWT token
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String fetchedEmail = authentication.getName(); // Get email from JWT token
+        Long staffId = staffService.getStaffIdByEmail(fetchedEmail); // Find patient ID
+
+        Response response = taskService.getTaskByStaffId(staffId);
+        return ResponseEntity.status(response.getStatusCode()).body(response);
+    }
 }

@@ -1,6 +1,6 @@
 package com.vladyslav.HealthcareClinic.service.interfac;
 
-import com.vladyslav.HealthcareClinic.dto.Response;
+import com.vladyslav.HealthcareClinic.dto.response.Response;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;

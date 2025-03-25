@@ -1,8 +1,8 @@
 package com.vladyslav.HealthcareClinic.controller;
 
-import com.vladyslav.HealthcareClinic.dto.LoginRequest;
-import com.vladyslav.HealthcareClinic.dto.RegisterRequest;
-import com.vladyslav.HealthcareClinic.dto.Response;
+import com.vladyslav.HealthcareClinic.dto.requests.LoginRequest;
+import com.vladyslav.HealthcareClinic.dto.requests.RegisterRequest;
+import com.vladyslav.HealthcareClinic.dto.response.Response;
 import com.vladyslav.HealthcareClinic.service.interfac.IUserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,11 +30,6 @@ public class AuthController {
         return ResponseEntity.status(response.getStatusCode()).body(response);
     }
 
-//    @PostMapping("/register-admin")
-//    public ResponseEntity<Response> response (@PathVariable String email, @PathVariable String password) {
-//        Response response = userService.createAdmin(email,password);
-//        return ResponseEntity.status(response.getStatusCode()).body(response);
-//    }
 
     @PostMapping("/register-admin")
     public ResponseEntity<Response> registerAdmin(@RequestBody Map<String, String> request) {

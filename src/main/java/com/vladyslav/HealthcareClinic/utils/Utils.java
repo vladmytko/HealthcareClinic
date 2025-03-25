@@ -3,7 +3,6 @@ package com.vladyslav.HealthcareClinic.utils;
 import com.vladyslav.HealthcareClinic.dto.*;
 import com.vladyslav.HealthcareClinic.entity.*;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 

@@ -1,12 +1,10 @@
 package com.vladyslav.HealthcareClinic.service.impl;
 
 import com.vladyslav.HealthcareClinic.dto.ImageDTO;
-import com.vladyslav.HealthcareClinic.dto.Response;
-import com.vladyslav.HealthcareClinic.dto.TaskDTO;
+import com.vladyslav.HealthcareClinic.dto.response.Response;
 import com.vladyslav.HealthcareClinic.entity.Image;
 import com.vladyslav.HealthcareClinic.entity.Patient;
 import com.vladyslav.HealthcareClinic.entity.Staff;
-import com.vladyslav.HealthcareClinic.entity.Task;
 import com.vladyslav.HealthcareClinic.exception.OurException;
 import com.vladyslav.HealthcareClinic.repo.ImageRepository;
 import com.vladyslav.HealthcareClinic.repo.PatientRepository;

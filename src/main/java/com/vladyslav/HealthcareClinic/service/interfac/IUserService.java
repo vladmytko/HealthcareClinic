@@ -1,9 +1,8 @@
 package com.vladyslav.HealthcareClinic.service.interfac;
 
-import com.vladyslav.HealthcareClinic.dto.LoginRequest;
-import com.vladyslav.HealthcareClinic.dto.RegisterRequest;
-import com.vladyslav.HealthcareClinic.dto.Response;
-import com.vladyslav.HealthcareClinic.entity.User;
+import com.vladyslav.HealthcareClinic.dto.requests.LoginRequest;
+import com.vladyslav.HealthcareClinic.dto.requests.RegisterRequest;
+import com.vladyslav.HealthcareClinic.dto.response.Response;
 
 public interface IUserService {
 

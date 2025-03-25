@@ -1,7 +1,7 @@
 package com.vladyslav.HealthcareClinic.service.impl;
 
 import com.vladyslav.HealthcareClinic.dto.PatientDTO;
-import com.vladyslav.HealthcareClinic.dto.Response;
+import com.vladyslav.HealthcareClinic.dto.response.Response;
 import com.vladyslav.HealthcareClinic.entity.Patient;
 import com.vladyslav.HealthcareClinic.entity.User;
 import com.vladyslav.HealthcareClinic.exception.OurException;
@@ -11,8 +11,6 @@ import com.vladyslav.HealthcareClinic.service.interfac.IPatientService;
 import com.vladyslav.HealthcareClinic.utils.JWTUtils;
 import com.vladyslav.HealthcareClinic.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;

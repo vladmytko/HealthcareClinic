@@ -1,6 +1,9 @@
 package com.vladyslav.HealthcareClinic.service.impl;
 
 import com.vladyslav.HealthcareClinic.dto.*;
+import com.vladyslav.HealthcareClinic.dto.requests.LoginRequest;
+import com.vladyslav.HealthcareClinic.dto.requests.RegisterRequest;
+import com.vladyslav.HealthcareClinic.dto.response.Response;
 import com.vladyslav.HealthcareClinic.entity.Patient;
 import com.vladyslav.HealthcareClinic.entity.User;
 import com.vladyslav.HealthcareClinic.exception.OurException;
@@ -9,11 +12,9 @@ import com.vladyslav.HealthcareClinic.repo.UserRepository;
 import com.vladyslav.HealthcareClinic.service.interfac.IUserService;
 import com.vladyslav.HealthcareClinic.utils.JWTUtils;
 import com.vladyslav.HealthcareClinic.utils.Utils;
-import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.parameters.P;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 

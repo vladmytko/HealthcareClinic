@@ -1,6 +1,7 @@
-package com.vladyslav.HealthcareClinic.dto;
+package com.vladyslav.HealthcareClinic.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.vladyslav.HealthcareClinic.dto.*;
 import lombok.Data;
 
 import java.util.List;
