@@ -80,7 +80,7 @@ public class UserService implements IUserService {
 
 
             // Set success response
-            response.setStatusCode(201);
+            response.setStatusCode(200);
             response.setMessage("Patient registered successfully");
             response.setUserDTO(userDTO);
             response.setPatientDTO(patientResponse.getPatientDTO());

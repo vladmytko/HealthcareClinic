@@ -37,7 +37,7 @@ public class Patient {
 
 
     @NotNull(message = "Date of birth is required")
-    @JsonFormat(pattern = "dd/MM/yyyy")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate dateOfBirth;
 
     // Nullable fields for doctor-only updates

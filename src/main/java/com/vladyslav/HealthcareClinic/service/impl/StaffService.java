@@ -307,6 +307,7 @@ public class StaffService  implements IStaffService {
             if(address != null) staff.setAddress(address);
             if(dateOfBirth != null) staff.setDateOfBirth(dateOfBirth);
             if(phoneNumber != null) staff.setPhoneNumber(phoneNumber);
+         
 
             // Save updated staff entity
             Staff updatedStaff = staffRepository.save(staff);

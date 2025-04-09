@@ -1,4 +1,5 @@
 import axios from "axios";
+import {jwtDecode} from "jwt-decode";
 
 export default class ApiService {
 
@@ -21,6 +22,18 @@ export default class ApiService {
         if(Object.values(payload).some(value => value === null || value === undefined)) {
             console.error("Validation Error: Some required fields are missing.");
             throw new Error("Validation Error: All required fields must be provided.");
+        }
+    }
+
+    static getDecodedToken() {
+        const token = localStorage.getItem('token'); // Retrieves the JWT from local storage
+        if (!token) return null; // if no token, return null
+        
+        try {
+            return jwtDecode(token); // Attemots to decode the JWT
+        } catch (err) {
+            console.error("Invalid JWT", err); // Catches decoding errors 
+            return null; // Returns null if decoding fails
         }
     }
 
@@ -118,7 +131,7 @@ export default class ApiService {
     }
 
     /* Get Patient by email (ADMIN and STAFF)*/
-    static async getPatient(email) {
+    static async getPatientByEmail(email) {
         try {
             const response = await axios.get(`${this.BASE_URL}/patient/get-patient-by-email/${email}`, {
                 headers: this.getHeader()
@@ -130,7 +143,7 @@ export default class ApiService {
     }
 
     /* Get Patient by name (ADMIN and STAFF) */
-    static async getPatient(firstName, lastName) {
+    static async getPatientByName(firstName, lastName) {
         try {
             const response = await axios.get(`${this.BASE_URL}/patient/get-patient-by-name/${firstName}/${lastName}`, {
                 headers: this.getHeader()
@@ -191,7 +204,7 @@ export default class ApiService {
                {headers: this.getHeader()}
             );
             return response.data;
-        } catch {
+        } catch (error) {
             console.error("Error updating patient details", error.response?.data || error.message);
             throw error;
         }
@@ -285,7 +298,7 @@ export default class ApiService {
     }
 
     // Delete staff account by ID (ADMIN) 
-    static async deleteStaff() {
+    static async deleteStaff(staffId) {
         try {
             const response = await axios.delete(`${this.BASE_URL}/patient/delete-staff/${staffId}}`, {
                 headers: this.getHeader()
@@ -307,14 +320,14 @@ export default class ApiService {
                {headers: this.getHeader()}
             );
             return response.data;
-        } catch {
+        } catch (error){
             console.error("Error updating staff details", error.response?.data || error.message);
             throw error;
         }
     }
 
     /* Update self staff details (STAFF) */
-    static async updateSelfPatientDetails(staffData) {
+    static async updateSelfStaffDetails(staffData) {
         this.validatePayload(staffData);
 
         try{
@@ -387,7 +400,6 @@ export default class ApiService {
     }
 
     // Get task by patient ID 
-    // Patient should get tasks automatically
     static async getTaskByPatientId(patientId) {
         try{
             const response = await axios.get(`${this.BASE_URL}/get-task-by-patient-id/${patientId}`, {
@@ -400,6 +412,109 @@ export default class ApiService {
         }
     }
 
-    // Delete task 
+    // Delete task by Task ID (ADMIN and STAFF)
+    static async deleteTask(taskId) {
+        try{
+            const response = await axios.delete(`${this.BASE_URL}/delete-task-by-id/${taskId}`, {
+                headers: this.getHeader()
+            });
+            return response.data;
+        } catch (error) {
+            console.error("Error deleting tasks by task ID", error.response?.data || error.message);
+            throw error;
+        }
+    }
+
+    // Update task by task ID (STAFF AND ADMIN)
+    static async updateTask(taskId, taskData) {
+
+        this.validatePayload({...taskData, taskId});
+    
+        try{
+            const response = await axios.patch(`${this.BASE_URL}/update-task/${taskId}`, 
+                taskData, 
+                {headers: this.getHeader()}
+            );
+            return response.data;
+        } catch (error) {
+            console.error("Error updating tasks by task ID", error.response?.data || error.message);
+            throw error;
+        }
+    }
+
+    // Mark task as completed/uncompletdd (STAFF AND ADMIN)
+    static async markTaskAsCompleted(taskId, completed) {
+
+        this.validatePayload(completed);
+    
+        try{
+            const response = await axios.patch(`${this.BASE_URL}/complete-task/${taskId}`, 
+                {completed}, 
+                {headers: this.getHeader()}
+            );
+            return response.data;
+        } catch (error) {
+            console.error("Error updating tasks Completion", error.response?.data || error.message);
+            throw error;
+        }
+    }
+
+    // Patient retrieve tasks automatically
+    static async getPatientTasks(){
+        try{
+            const response = await axios.get(`${this.BASE_URL}/patient-tasks`,
+                {headers: this.getHeader()}
+            );
+            return response.data;
+        } catch (error) {
+            console.error("Error retrieving patient's tasks", error.response?.data || error.message);
+            throw error;
+        }
+    }
+
+    // Staff retrieve tasks automatically
+    static async getStaffTasks(){
+        try{
+            const response = await axios.get(`${this.BASE_URL}/staff-tasks`,
+                {headers: this.getHeader()}
+            );
+            return response.data;
+        } catch (error) {
+            console.error("Error retrieving staff's tasks", error.response?.data || error.message);
+            throw error;
+        }
+    }
+
+    /** AUTHENTICATION CHECKER */
+
+    static isAuthenticated() {
+        const decoded = this.getDecodedToken();
+        if (!decoded) return false;
+    
+        const currentTime = Date.now() / 1000; // seconds
+        return decoded.exp && decoded.exp > currentTime;
+    }
+
+        
+    static logout() {
+        localStorage.removeItem('token');
+    }
+    
+    
+    static isAdmin() {
+        const decoded = this.getDecodedToken();
+        return decoded?.role === 'ADMIN';
+    }
+    
+    static isPatient() {
+        const decoded = this.getDecodedToken();
+        return decoded?.role === 'PATIENT';
+    }
+    
+    static isStaff() {
+        const decoded = this.getDecodedToken();
+        return decoded?.role === 'STAFF';
+    }
+
 
 }

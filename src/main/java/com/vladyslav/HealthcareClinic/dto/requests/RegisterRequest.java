@@ -34,7 +34,7 @@ public class RegisterRequest {
     private String phoneNumber;
 
     @NotNull(message = "Date of birth is required")
-    @JsonFormat(pattern = "dd/MM/yyyy")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate dateOfBirth;
 
 
