@@ -17,12 +17,17 @@ This application provides an online healthcare clinic management system with aut
 - **Task Management** (Assigning tasks to staff and patients)
 - **Image Management** (Uploading, fetching, updating, and deleting images)
 - **AWS S3 Integration** (To store and retrieve images securely)
+- **Login Page** (Successfully tested, no styling applied)
+- **Register Page** (Successfully tested, no styling applied)
 
 ### ⏳ **Pending Features**
-- **Front End** (React)
+- **Appointment Booking System** (SpringBoot & React)
+- **Front End Development** (React)
 
 ### **Next Steps**
-
+- **Patient Home Page** (React)
+- **Staff Home Page** (React)
+- **Admin Home Page** (React)
 
 # Healthcare Clinic API Documentation
 
