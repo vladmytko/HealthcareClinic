@@ -1,6 +1,18 @@
 import axios from "axios";
 import {jwtDecode} from "jwt-decode";
 
+// Global interceptor to add token automatically
+axios.interceptors.request.use(
+    (config) => {
+        const token = localStorage.getItem("token");
+        if (token) {
+            config.headers.Authorization = `Bearer ${token}`;
+        }
+        return config;
+    },
+    (error) => Promise.reject(error)
+);
+
 export default class ApiService {
 
     static BASE_URL = "http://localhost:4040";
@@ -170,7 +182,7 @@ export default class ApiService {
 
     static async getLoggedInPatientAccount() {
         try {
-            const response =  await axios.get(`${this.BASE_URL}/get-logged-in-patients-info`,{
+            const response =  await axios.get(`${this.BASE_URL}/patient/get-logged-in-patients-info`,{
                 headers: this.getHeader()
             });
             return response.data

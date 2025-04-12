@@ -15,19 +15,19 @@ public class PatientDTO {
     private String phoneNumber;
 
     @JsonFormat(pattern = "dd/MM/yyyy")
-    private LocalDate dataOfBirth;
+    private LocalDate dateOfBirth;
 
     private String address;
     private String diagnosis;
     private String conditions;
     private String email;
 
-    public PatientDTO(Long id, String firstName, String lastName, String phoneNumber, LocalDate dataOfBirth, String address, String diagnosis, String conditions, String email) {
+    public PatientDTO(Long id, String firstName, String lastName, String phoneNumber, LocalDate dateOfBirth, String address, String diagnosis, String conditions, String email) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.phoneNumber = phoneNumber;
-        this.dataOfBirth = dataOfBirth;
+        this.dateOfBirth = dateOfBirth;
         this.address = address;
         this.diagnosis = diagnosis;
         this.conditions = conditions;
@@ -70,12 +70,12 @@ public class PatientDTO {
         this.phoneNumber = phoneNumber;
     }
 
-    public LocalDate getDataOfBirth() {
-        return dataOfBirth;
+    public LocalDate getDateOfBirth() {
+        return dateOfBirth;
     }
 
-    public void setDataOfBirth(LocalDate dataOfBirth) {
-        this.dataOfBirth = dataOfBirth;
+    public void setDateOfBirth(LocalDate dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
     }
 
     public String getAddress() {

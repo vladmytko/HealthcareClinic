@@ -51,6 +51,7 @@ public class PatientController {
     }
 
     @GetMapping("/get-logged-in-patients-info")
+    @PreAuthorize("hasAuthority('PATIENT')")
     public ResponseEntity<Response> getLoggedInPatientInfoByEmail() {
 
         // Get the authenticated user's email
